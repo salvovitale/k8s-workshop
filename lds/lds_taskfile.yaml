@@ -1,0 +1,39 @@
+version: "3"
+
+env:
+  KIND_CLUSTER_NAME: k8s-ws
+  WS_NAMESPACE: workshop
+  HW_APP_IMAGE: app-hello-world:latest
+
+includes:
+  kind:
+    taskfile: kind/kind_taskfile.yaml
+    dir: kind
+    vars:
+      KIND_CLUSTER_NAME: $KIND_CLUSTER_NAME
+  app-hw:
+    taskfile: apps/01-hello-world/app_hw_taskfile.yaml
+    dir: apps/01-hello-world
+
+tasks:
+  create-k8s-kind-cluster:
+    cmds:
+      - task: kind:create
+      - task: kind:set-cluster-context
+      - task: kind:create-namespace
+        vars:
+          NAMESPACE: $WS_NAMESPACE
+
+  destroy-k8s-kind-cluster:
+    cmds:
+      - task: kind:destroy
+
+  build-hw-image:
+    vars:
+    cmds:
+      - task: app-hw:build-image
+        vars:
+          IMAGE_TAG: $HW_APP_IMAGE
+      - kind load docker-image $HW_APP_IMAGE --name $KIND_CLUSTER_NAME
+
+

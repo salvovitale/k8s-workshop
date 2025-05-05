@@ -1,0 +1,21 @@
+# Manifests always specify the version of the Kubernetes API
+# and the type of resource.
+apiVersion: v1
+kind: Pod
+
+# Metadata for the resource includes the name (mandatory)
+# and labels (optional).
+metadata:
+  creationTimestamp: null
+  labels:
+    run: hello-world-3
+  name: hello-world-3
+
+# The spec is the actual specification for the resource.
+# For a Pod the minimum is the container(s) to run,
+# with the container name and image.
+spec:
+  containers:
+  - image: app-hello-world:latest
+    imagePullPolicy: IfNotPresent
+    name: hello-world-3

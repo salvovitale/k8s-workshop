@@ -1,0 +1,14 @@
+version: "3"
+
+includes:
+  lds:
+    taskfile: ./lds/lds_taskfile.yaml
+
+tasks:
+  echo:
+    cmds:
+      - echo "Welcome to the Kubernetes Workshop!"
+
+  create-slides:
+    cmds:
+      -  marp --pdf  --allow-local-files slide-01.md

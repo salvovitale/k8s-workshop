@@ -1,0 +1,47 @@
+version: "3"
+
+env:
+  KIND_CLUSTER_CONFIG: cluster.yaml
+
+tasks:
+  create:
+    requires:
+      vars: [KIND_CLUSTER_NAME, KIND_CLUSTER_CONFIG]
+    cmds:
+      - kind create cluster --config $KIND_CLUSTER_CONFIG --name {{.KIND_CLUSTER_NAME}}
+      - task: set-cluster-context
+    status:
+      - kind get clusters | grep -q ^{{.KIND_CLUSTER_NAME}}$
+
+  destroy:
+    requires:
+      vars: [KIND_CLUSTER_NAME]
+    cmds:
+      - kind delete cluster --name {{.KIND_CLUSTER_NAME}}
+
+  set-cluster-context:
+    requires:
+      vars: [KIND_CLUSTER_NAME]
+    cmds:
+      - kubectl cluster-info --context kind-{{.KIND_CLUSTER_NAME}}
+
+  set-context:
+    cmds:
+      - kubectl cluster-info --context kind-$KIND_CLUSTER_NAME
+      - kubectl config use-context kind-$KIND_CLUSTER_NAME
+
+  set-namespace-to-context:
+    requires:
+      vars: [NAMESPACE]
+    cmds:
+      - kubectl config set-context --current --namespace={{ .NAMESPACE }}
+    silent: true
+
+  create-namespace:
+    requires:
+      vars: [NAMESPACE]
+    cmds:
+      - kubectl create namespace {{.NAMESPACE}}
+    status:
+      - kubectl get namespaces -o name | grep -q ^namespace/{{.NAMESPACE}}$
+

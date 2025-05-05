@@ -1,0 +1,35 @@
+# Deployments are part of the apps version 1 API spec.
+apiVersion: apps/v1
+kind: Deployment
+
+# Metadata for the resource includes the name (mandatory)
+# and labels (optional).
+metadata:
+  labels:
+    app: hello-world-4
+  name: hello-world-4
+
+# The spec includes the label selector the Deployment uses it
+# to find its own managed resources. I’m using the app label,
+# but this could be any combination of key-value pairs.
+spec:
+  selector:
+    matchLabels:
+      app: hello-world-4
+
+# The template is used when the Deployment creates a Pod
+  template:
+
+  # Pods in a Deployment don’t have a name,
+  # but they need to specify labels that
+  # match the selector in the spec.
+    metadata:
+      labels:
+        app: hello-world-4
+
+    # The Pod spec lists the container name and image
+    spec:
+      containers:
+      - image: app-hello-world:latest
+        name: app-hello-world
+
