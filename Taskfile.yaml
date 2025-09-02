@@ -11,4 +11,4 @@ tasks:
 
   create-slides:
     cmds:
-      -  marp --pdf  --allow-local-files slide-01.md
+      -  marp --pdf  --allow-local-files {{.CLI_ARGS}}

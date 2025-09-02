@@ -1,0 +1,8 @@
+version: "3"
+
+tasks:
+  build-image:
+    requires:
+      vars: [IMAGE_TAG]
+    cmds:
+      - docker build -t {{.IMAGE_TAG}} .

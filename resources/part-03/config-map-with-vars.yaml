@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-world-config-env-vars
+data:
+  K8S_WS_PART: part-03
+  K8S_WS_MODE: awesome

@@ -11,9 +11,12 @@ includes:
     dir: kind
     vars:
       KIND_CLUSTER_NAME: $KIND_CLUSTER_NAME
-  app-hw:
+  app-hw-01:
     taskfile: apps/01-hello-world/app_hw_taskfile.yaml
     dir: apps/01-hello-world
+  app-hw-03:
+    taskfile: apps/03-hello-world/app_hw_taskfile.yaml
+    dir: apps/03-hello-world
 
 tasks:
   create-k8s-kind-cluster:
@@ -28,12 +31,18 @@ tasks:
     cmds:
       - task: kind:destroy
 
-  build-hw-image:
+  build-hw-image-01:
     vars:
     cmds:
-      - task: app-hw:build-image
+      - task: app-hw-01:build-image
         vars:
           IMAGE_TAG: $HW_APP_IMAGE
       - kind load docker-image $HW_APP_IMAGE --name $KIND_CLUSTER_NAME
 
-
+  build-hw-image-03:
+    vars:
+    cmds:
+      - task: app-hw-03:build-image
+        vars:
+          IMAGE_TAG: $HW_APP_IMAGE
+      - kind load docker-image $HW_APP_IMAGE --name $KIND_CLUSTER_NAME

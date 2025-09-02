@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hello-world
+  name: hello-world
+spec:
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - image: app-hello-world:latest
+        name: app-hello-world
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: hello-world-config-env-vars
+        - secretRef:
+            name: hello-world-secret-vars
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+        - name: secret-volume
+          mountPath: /app/secret
+      volumes:
+      - name: config-volume
+        configMap:
+          name: hello-world-config-files
+      - name: secret-volume
+        secret:
+          secretName: hello-world-secret-files
